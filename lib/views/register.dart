@@ -1,22 +1,30 @@
 import 'package:alfa/api/database.dart';
+import 'package:alfa/models/user.dart';
 import 'package:alfa/views/list.dart';
-import 'package:alfa/views/register.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class Register extends StatefulWidget {
   late DataBase handler;
-  Login({required this.handler});
+  Register({required this.handler});
   @override
-  LoginState createState() => LoginState();
+  RegisterState createState() => RegisterState();
 }
 
-class LoginState extends State<Login> {
+class RegisterState extends State<Register> {
+  late TextEditingController genderController;
+  late TextEditingController cityController;
+  late TextEditingController countryController;
+  late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController passController;
   late double sizeW, sizeH;
 
   void initState(){
     super.initState();
+    genderController=TextEditingController();
+    cityController=TextEditingController();
+    countryController=TextEditingController();
+    nameController=TextEditingController();
     emailController=TextEditingController();
     passController=TextEditingController();
   }
@@ -29,7 +37,7 @@ class LoginState extends State<Login> {
               content:Text(body,textAlign: TextAlign.center,),
               actions: <Widget>[
                 TextButton(
-                child: Text("Cancelar"),
+                child: Text("Aceptar"),
                 onPressed: () {
                   Navigator.pop(context);
                 }
@@ -60,7 +68,7 @@ class LoginState extends State<Login> {
     );
   }
 
-  Widget botonIniciar(String label,int type) {
+  Widget botonIniciar() {
     return GestureDetector(
       child: Container(
           width: sizeW * 0.5,
@@ -68,28 +76,23 @@ class LoginState extends State<Login> {
           margin: const EdgeInsets.only(top: 15),
           child: Center(
             child: Text(
-              label,
+              "Iniciar",
             ),
           )),
       onTap: () async {
-        if(type==1){
-        await widget.handler.searchUser(emailController.text).then((value){
-          if(value==null){
-            showError("Email no registrado", "El email ${emailController.text} no se ha registrado");
-          }else{
-            if(value.password==passController.text){
+        if(RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailController.text)){
+          if(RegExp(r"^(?=(?:.*[A-Z]){1})(?=(?:.*[a-z]){1})\S{8,}$").hasMatch(passController.text)){
+            await widget.handler.insertUser([User(name: nameController.text, city: cityController.text, country:countryController.text, gender: genderController.text,email: emailController.text,password: passController.text)]);
             Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => ListUser(title: "Alfa-Jose Luis", handler: widget.handler)),
       ModalRoute.withName('/'));
-            }else{
-              showError("Contraseña no valida","La contraseña y el email no coinciden");
-            }
           }
-        });
+          else {
+            showError("Formato de contraseña", "Debe tener al menos una mayúscula,una minúscula y 8 caracteres");
+          }
         }else{
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Register(handler: widget.handler)));
+          showError("Email no valido", "ingresa un email valido");
         }
       },
     );
@@ -101,11 +104,14 @@ class LoginState extends State<Login> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            logField(nameController, "Nombre", false),
+            logField(cityController,"Ciudad", false),
+            logField(countryController,"Pais", false),
+            logField(genderController,"Genero", false),
             logField(emailController,
                 "Email", false),
             logField(passController, "Contraseña", true),
-            botonIniciar("Iniciar",1),
-            botonIniciar("Crear cuenta",2),
+            botonIniciar(),
           ],
         )
     );
@@ -116,6 +122,7 @@ class LoginState extends State<Login> {
     sizeW = MediaQuery.of(context).size.width;
     sizeH = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(title: Text("Registro"),),
       body: Center(
         child: menu(),
       ),

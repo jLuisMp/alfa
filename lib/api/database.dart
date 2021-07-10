@@ -9,7 +9,7 @@ class DataBase {
       join(path, 'example.db'),
       onCreate: (database, version) async {
         await database.execute(
-          "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,city TEXT NOT NULL , country TEXT NOT NULL, email TEXT,gender TEXT NOT NULL)",
+          "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,city TEXT NOT NULL , country TEXT NOT NULL,password TEXT NOT NULL, email TEXT NOT NULL,gender TEXT NOT NULL)",
         );
       },
       version: 1,

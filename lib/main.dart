@@ -44,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
   Future<int> addUsers() async {
-    User firstUser = User(name: "peter", city: "Puebla", country: "Lebanon", gender: "Masculino",email: "luismoyotl.p@gmail.com");
-    User secondUser = User(name: "john", city: "Tlaxcala", country: "United Kingdom",gender: "Masculino",email: "luismoyotl1b@gmail.com");
+    User firstUser = User(name: "peter", city: "Puebla", country: "Lebanon", gender: "Masculino",email: "luismoyotl.p@gmail.com",password: "Password2021");
+    User secondUser = User(name: "john", city: "Tlaxcala", country: "United Kingdom",gender: "Masculino",email: "luismoyotl1b@gmail.com",password: "Password2021");
     List<User> listOfUsers = [firstUser, secondUser];
     return await handler.insertUser(listOfUsers);
   }
