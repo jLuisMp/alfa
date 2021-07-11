@@ -4,20 +4,20 @@ import 'package:alfa/views/list.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  late DataBase handler;
-  Register({required this.handler});
+  DataBase handler;
+  Register({this.handler});
   @override
   RegisterState createState() => RegisterState();
 }
 
 class RegisterState extends State<Register> {
-  late TextEditingController genderController;
-  late TextEditingController cityController;
-  late TextEditingController countryController;
-  late TextEditingController nameController;
-  late TextEditingController emailController;
-  late TextEditingController passController;
-  late double sizeW, sizeH;
+  TextEditingController genderController;
+  TextEditingController cityController;
+  TextEditingController countryController;
+  TextEditingController nameController;
+  TextEditingController emailController;
+  TextEditingController passController;
+  double sizeW, sizeH;
 
   void initState(){
     super.initState();

@@ -1,5 +1,8 @@
+//-no-sound-null-safety 
 import 'package:alfa/api/database.dart';
+import 'package:alfa/api/preference.dart';
 import 'package:alfa/models/user.dart';
+import 'package:alfa/opening.dart';
 import 'package:alfa/views/list.dart';
 import 'package:alfa/views/login.dart';
 import 'package:flutter/material.dart';
@@ -23,16 +26,16 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
-  final String? title;
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  late DataBase handler;
+  Preferences preferences= Preferences();
+  DataBase handler;
 
   @override
   void initState() {
@@ -41,6 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
     this.handler.initializeDB().whenComplete(() async {
       await this.addUsers();
       setState(() {});
+    });
+    preferences.init().then((value){
+      setState(() {
+        preferences = value;
+      });
     });
   }
   Future<int> addUsers() async {
@@ -52,6 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Login(handler:handler);
+    return MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        brightness: Brightness.light,
+      ),
+      title: 'Alfa-Jose Luis',
+      initialRoute: '/',
+      routes: {
+        "/": (context) => Opening(handler: handler),
+      },
+    );
   }
 }

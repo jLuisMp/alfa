@@ -1,19 +1,21 @@
 import 'package:alfa/api/database.dart';
+import 'package:alfa/api/preference.dart';
 import 'package:alfa/views/list.dart';
 import 'package:alfa/views/register.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
-  late DataBase handler;
-  Login({required this.handler});
+  DataBase handler;
+  Login({this.handler});
   @override
   LoginState createState() => LoginState();
 }
 
 class LoginState extends State<Login> {
-  late TextEditingController emailController;
-  late TextEditingController passController;
-  late double sizeW, sizeH;
+  TextEditingController emailController;
+  TextEditingController passController;
+  Preferences preferences=Preferences();
+  double sizeW, sizeH;
 
   void initState(){
     super.initState();
@@ -78,6 +80,8 @@ class LoginState extends State<Login> {
             showError("Email no registrado", "El email ${emailController.text} no se ha registrado");
           }else{
             if(value.password==passController.text){
+              preferences.logged=true;
+              preferences.commit();
             Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => ListUser(title: "Alfa-Jose Luis", handler: widget.handler)),
